@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Notification {
+  id          String    @id
+  // podemos chamar recipientId de authUserId ou somente userId
+  // auth seria o microserviço de autenticação 
+  // userId seria o id do usuário que faz referência ao usuário em todas as aplicações (serviços)
+  // no serviço de notificações, o userId é o recipientId, no serviço de compras, o userId é o clientId -> DDD (Domain Driven Design)
+  recipientId String
+  content     String
+  category    String
+  readAt      DateTime?
+  canceledAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index(recipientId)
+  @@map("notifications")
+}
